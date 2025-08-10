@@ -1,120 +1,105 @@
-# 🎧 Transcripción de Videos con Google Cloud Speech-to-Text
+# Transcriptor de Video a Texto con Google Cloud
 
-Script en Python que:
-1) extrae el **audio** de un video (MP4 → MP3),
-2) sube el audio a **Google Cloud Storage (GCS)**,
-3) ejecuta una **transcripción asíncrona** con **Speech-to-Text**,
-4) guarda el resultado en un **.txt** junto al video original.
+Este proyecto es una herramienta de línea de comandos en Python que automatiza la transcripción de archivos de video. Utiliza la API de Google Cloud Speech-to-Text para generar transcripciones de alta precisión.
 
-> Probado con `moviepy`, `google-cloud-speech` y `google-cloud-storage`.
+## Características
 
----
+-   **Extracción de Audio:** Extrae automáticamente la pista de audio de archivos de video (MP4, MOV, etc.).
+-   **Integración con Google Cloud:** Sube de forma segura los archivos de audio a Google Cloud Storage para su procesamiento.
+-   **Transcripción Asíncrona:** Utiliza el modo de reconocimiento de larga duración de la API de Speech-to-Text, ideal para videos largos.
+-   **Organización de Archivos:** Guarda los archivos de audio (`.mp3`) y las transcripciones (`.txt`) en una carpeta de salida (`outputs/`) para mantener el proyecto ordenado.
+-   **Configuración Segura:** Gestiona las claves de API y la configuración del proyecto de forma segura a través de un archivo `.env`.
 
-## 🗂 Estructura sugerida del proyecto
+## Estructura del Proyecto
 
+```
 app-transcripcion-videos/
-├─ transcripcion.py
-├─ README.md
-├─ requirements.txt
-├─ .gitignore
-├─ videos/ # (opcional) fuente de videos
-├─ outputs/ # (opcional) a- .mp3 b- .txt
-└─ secrets/ # claves/credenciales (NO se versionan)
+├── .git/
+├── .gitignore
+├── .env.example
+├── LICENSE
+├── README.md
+├── requirements.txt
+├── transcripcion.py
+├── outputs/
+├── secrets/
+└── videos/
+```
 
-markdown
-Copiar
-Editar
+## Prerrequisitos
 
-> Puedes mantener tus videos en `videos/` y las salidas en `outputs/`. Ajusta rutas según tu preferencia.
+Antes de empezar, asegúrate de tener lo siguiente:
 
----
+1.  **Python 3.7+**
+2.  **FFmpeg:** Es una dependencia de `moviepy` para la manipulación de video y audio.
+    -   **Windows:** `choco install ffmpeg`
+    -   **macOS:** `brew install ffmpeg`
+    -   **Linux:** `sudo apt-get install ffmpeg`
+3.  **Cuenta de Google Cloud:**
+    -   Un proyecto de GCP activo.
+    -   La API de **Speech-to-Text** habilitada.
+    -   Un **Bucket** de Google Cloud Storage creado.
+    -   Una **cuenta de servicio** con permisos para acceder a Storage y Speech-to-Text. Deberás descargar la clave de esta cuenta en formato JSON.
 
-## ✅ Requisitos
+## Instalación y Configuración
 
-- **Python 3.10.7**
-- Cuenta de **Google Cloud** con:
-  - Proyecto habilitado (`urbanvibe-pruebas` u otro)
-  - API **Speech-to-Text** habilitada
-  - **Bucket** GCS creado (por ej. `speech_to_text_esm_pruebas`)
-  - **Credencial de servicio** (JSON)
-- **FFmpeg** instalado (requerido por `moviepy` para manipular audio/video)
+Sigue estos pasos para poner en marcha el proyecto:
 
-### Instalar FFmpeg
-- Windows: `choco install ffmpeg` (o descarga desde la web oficial)
-- macOS: `brew install ffmpeg`
-- Linux (Debian/Ubuntu): `sudo apt-get install ffmpeg`
+**1. Clona el repositorio:**
+```bash
+git clone <URL_DEL_REPOSITORIO_EN_GITHUB>
+cd video-transcription-gcp
+```
 
----
+**2. Crea y activa un entorno virtual:**
+```bash
+# Crear el entorno
+python -m venv .venv
 
-## 🔐 Autenticación GCP
+# Activar en Windows
+.venv\Scripts\activate
 
-Guarda tu **clave JSON** de cuenta de servicio en `./secrets/` y exporta la variable:
+# Activar en macOS/Linux
+source .venv/bin/activate
+```
+
+**3. Instala las dependencias:**
+```bash
+pip install -r requirements.txt
+```
+
+**4. Configura tus credenciales de Google Cloud:**
+-   Coloca el **archivo JSON** de tu cuenta de servicio dentro de la carpeta `secrets/`.
+-   Establece la variable de entorno `GOOGLE_APPLICATION_CREDENTIALS` para que apunte a tu clave. En PowerShell (Windows):
+    ```powershell
+    $env:GOOGLE_APPLICATION_CREDENTIALS = ".\secrets\tu-archivo-json.json"
+    ```
+    *Nota: Este comando solo establece la variable para la sesión actual de la terminal.*
+
+**5. Configura las variables del proyecto:**
+-   Crea una copia del archivo `.env.example` y renómbrala a `.env`.
+-   Abre el archivo `.env` y rellena los valores con la información de tu proyecto de Google Cloud:
+    ```dotenv
+    GCP_PROJECT_ID="tu-gcp-project-id"
+    GCS_BUCKET_NAME="tu-gcs-bucket-name"
+    AUDIO_LANGUAGE_CODE="es-CL"
+    ```
+
+## Uso
+
+Para transcribir un video, ejecuta el script `transcripcion.py` desde la raíz del proyecto, pasándole la ruta al archivo de video como argumento.
 
 ```bash
-# Windows (PowerShell)
-$env:GOOGLE_APPLICATION_CREDENTIALS = ".\secrets\mi-servicio.json"
+python transcripcion.py "ruta/al/video.mp4"
+```
 
-# macOS / Linux
-export GOOGLE_APPLICATION_CREDENTIALS="./secrets/mi-servicio.json"
-🧩 Instalación
-bash
-Copiar
-Editar
-# 1) Crear y activar entorno virtual
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
+Por ejemplo, si tienes tus videos en la carpeta `videos/`:
+```bash
+python transcripcion.py "videos/mi-conferencia.mp4"
+```
 
-# 2) Instalar dependencias
-pip install -r requirements.txt
-# Si no tienes requirements.txt todavía:
-# pip install google-cloud-speech google-cloud-storage moviepy
-requirements.txt (sugerido):
+La transcripción final se guardará en la carpeta `outputs/` con el mismo nombre que el video, pero con la extensión `.txt`.
 
-txt
-Copiar
-Editar
-google-cloud-speech>=2.27.0
-google-cloud-storage>=2.18.0
-moviepy>=1.0.3
-⚙️ Configuración del script
-En transcripcion.py, verifica/ajusta:
+## Licencia
 
-python
-Copiar
-Editar
-GCP_PROJECT_ID = "urbanvibe-pruebas"
-GCS_BUCKET_NAME = "speech_to_text_esm_pruebas"
-AUDIO_LANGUAGE_CODE = "es-CL"
-Recomendación futura: leer estos valores desde variables de entorno para evitar hardcode (ej. os.getenv("GCS_BUCKET_NAME")).
-
-▶️ Uso
-Opción A: editar la ruta dentro del script
-En la sección if __name__ == "__main__": cambia ruta_del_video por la ruta a tu archivo:
-
-python
-Copiar
-Editar
-ruta_del_video = "videos/mi_video.mp4"
-y luego ejecuta:
-
-bash
-Copiar
-Editar
-python transcripcion.py
-Opción B (mejora rápida): pasar la ruta por argumento
-Ejemplo rápido (si agregas un sys.argv):
-
-bash
-Copiar
-Editar
-python transcripcion.py "videos/mi_video.mp4"
-Si te interesa, te paso el snippet para aceptar argumentos inmediatamente.
-
-📄 Salidas
-mi_video.mp3 (audio extraído)
-
-mi_video.txt (transcripción final)
-
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.

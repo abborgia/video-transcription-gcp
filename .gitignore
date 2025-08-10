@@ -22,8 +22,10 @@ ENV/
 env/
 
 # ── Config/entorno ─────────────────────────────────────────
+# Ignorar todos los archivos .env excepto el de ejemplo
 *.env
 *.env.*
+!.env.example
 .envrc
 
 # ── Credenciales/secretos ──────────────────────────────────
