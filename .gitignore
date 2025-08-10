@@ -1,0 +1,56 @@
+# ── Python general ─────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.egg-info/
+.eggs/
+build/
+dist/
+.python-version
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ── Entornos virtuales ─────────────────────────────────────
+venv/
+.venv/
+ENV/
+env/
+
+# ── Config/entorno ─────────────────────────────────────────
+*.env
+*.env.*
+.envrc
+
+# ── Credenciales/secretos ──────────────────────────────────
+secrets/
+*.pem
+*.key
+# Si decides no versionar ningún JSON dentro de secrets/, basta con el directorio arriba
+# Si quieres una regla adicional por seguridad:
+*service-account*.json
+*credentials*.json
+
+# ── SO / IDE ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# ── Salidas del proyecto ───────────────────────────────────
+# Archivos generados por el script
+*.mp3
+# Descomenta si también quieres excluir transcripciones
+# *.txt
+
+# ── Vídeos (si los mantienes locales) ──────────────────────
+# Descomenta si no deseas versionar los videos fuente
+# videos/
+# *.mp4
+# *.mov
+# *.avi
