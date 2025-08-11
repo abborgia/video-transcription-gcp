@@ -103,3 +103,19 @@ La transcripción final se guardará en la carpeta `outputs/` con el mismo nombr
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+## Contribuciones
+Las contribuciones son bienvenidas. Si deseas colaborar, por favor abre un **issue** o envía un **pull request** con tus mejoras o correcciones.
+## Contacto
+Para cualquier duda o consulta, puedes contactarme a través de mi perfil de GitHub o abrir un issue en este repositorio.
+```
+## Créditos
+Este proyecto fue desarrollado por [Tu Nombre o Tu Organización] como parte de un ejercicio de aprendizaje y automatización de tareas con Python y Google Cloud.
+
+## Agradecimientos
+Agradecimientos especiales a la comunidad de desarrolladores de Python y a Google Cloud por proporcionar herramientas tan poderosas y accesibles para la transcripción de audio y video.
+```
+## Notas Adicionales
+-   Asegúrate de que el archivo de video esté en un formato compatible (MP4, MOV, etc.).
+-   La transcripción puede tardar un tiempo dependiendo de la duración del video y la carga actual de la API de Google Cloud.
+-   Revisa los límites de uso de la API de Google Cloud para evitar costos inesperados. Puedes encontrar más información en la [documentación oficial de Google Cloud](https://cloud.google.com/speech-to-text/pricing).

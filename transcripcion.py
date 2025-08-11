@@ -167,13 +167,30 @@ def main(video_file_path):
 
 # --- CÓMO USAR EL SCRIPT ---
 if __name__ == "__main__":
-    # El script ahora acepta la ruta del video como un argumento de línea de comandos.
-    # Ejemplo de uso:
-    # python transcripcion.py "ruta/a/tu/video.mp4"
+    # Opción 1: Define la ruta del video directamente en esta variable.
+    # Si prefieres no pasar la ruta como argumento cada vez, puedes establecerla aquí.
+    # Ejemplo: ruta_video_interno = "videos/mi_video.mp4"
+    ruta_video_interno = ""  # <-- DEJA ESTA LÍNEA VACÍA SI USARÁS UN ARGUMENTO
 
-    if len(sys.argv) < 2:
-        print("Uso: python transcripcion.py <ruta_del_video>")
+    # Opción 2: Pasa la ruta del video como un argumento al ejecutar el script.
+    # Ejemplo: python transcripcion.py "ruta/completa/a/tu/video.mp4"
+
+    ruta_del_video_final = ""
+
+    # Se da prioridad al video pasado como argumento en la línea de comandos.
+    if len(sys.argv) > 1:
+        ruta_del_video_final = sys.argv[1]
+        print(f"INFO: Se utilizará el video proporcionado como argumento: {ruta_del_video_final}")
+    # Si no hay argumento, se usa la ruta definida internamente.
+    elif ruta_video_interno:
+        ruta_del_video_final = ruta_video_interno
+        print(f"INFO: Se utilizará el video definido en la variable interna: {ruta_del_video_final}")
+    # Si no se proporciona de ninguna de las dos formas, se muestra un error.
+    else:
+        print("ERROR: No se ha especificado un archivo de video.")
+        print("Puedes hacerlo de dos maneras:")
+        print('  1. Como argumento: python transcripcion.py "ruta/al/video.mp4"')
+        print('  2. Editando el script: Define la ruta en la variable "ruta_video_interno".')
         sys.exit(1)
-        
-    ruta_del_video = sys.argv[1]
-    main(ruta_del_video)
+
+    main(ruta_del_video_final)
